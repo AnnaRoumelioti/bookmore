@@ -1,0 +1,46 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Page-1" id="M_JycVItR_v1rl9Gl2qj">
+    <mxGraphModel dx="1347" dy="1909" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="eyYb9vlLRyHli3wz3cNn-1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;" value="Book&lt;br&gt;-------------------------&lt;br&gt;id&lt;br&gt;title&lt;br&gt;isbn&lt;br&gt;description&lt;br&gt;price&lt;br&gt;publicationYear&lt;div&gt;language&lt;br&gt;&lt;div&gt;coverImageUrl&amp;nbsp;&lt;/div&gt;&lt;div&gt;format&lt;br&gt;stockQuantity&lt;/div&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="290" width="150" x="330" y="-1110" as="geometry" />
+        </mxCell>
+        <mxCell id="eyYb9vlLRyHli3wz3cNn-3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;" value="&lt;br&gt; Author&amp;nbsp;&lt;br&gt;------------------&lt;br&gt;&amp;nbsp;id&amp;nbsp;&lt;div&gt;firstName&amp;nbsp;&lt;br&gt;&amp;nbsp;lastName&lt;/div&gt;&lt;div&gt;slug&amp;nbsp;&lt;br&gt;&amp;nbsp;biography&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="210" width="130" x="60" y="-1095" as="geometry" />
+        </mxCell>
+        <mxCell id="eyYb9vlLRyHli3wz3cNn-4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;" value="&amp;nbsp;Publisher&amp;nbsp;&lt;br&gt;------------------&lt;br&gt;&amp;nbsp;id&amp;nbsp;&lt;div&gt;&amp;nbsp;name&amp;nbsp;&lt;br&gt;&amp;nbsp;country&amp;nbsp;&lt;/div&gt;&lt;div&gt;websiteUrl&amp;nbsp;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="210" width="140" x="620" y="-1095" as="geometry" />
+        </mxCell>
+        <mxCell id="eyYb9vlLRyHli3wz3cNn-5" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;" value="&lt;br&gt; Category&amp;nbsp;&lt;br&gt;--------------------&lt;div&gt;&amp;nbsp;id&amp;nbsp;&lt;br&gt;name&amp;nbsp;&lt;br&gt;description&lt;br&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="150" width="120" x="345" y="-700" as="geometry" />
+        </mxCell>
+        <mxCell id="eyYb9vlLRyHli3wz3cNn-20" edge="1" parent="1" style="endArrow=ERmany;html=1;rounded=0;startArrow=ERmany;startFill=0;endFill=0;strokeWidth=2;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="200" y="-980" as="sourcePoint" />
+            <mxPoint x="320" y="-1000" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eyYb9vlLRyHli3wz3cNn-21" connectable="0" parent="eyYb9vlLRyHli3wz3cNn-20" style="edgeLabel;resizable=0;html=1;;align=center;verticalAlign=middle;" value="writes" vertex="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eyYb9vlLRyHli3wz3cNn-23" edge="1" parent="1" style="endArrow=none;html=1;rounded=0;strokeWidth=2;startArrow=ERmany;startFill=0;endFill=0;" value="publishes">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="490" y="-980" as="sourcePoint" />
+            <mxPoint x="610" y="-1020" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eyYb9vlLRyHli3wz3cNn-26" edge="1" parent="1" style="endArrow=ERmany;html=1;rounded=0;strokeWidth=2;startArrow=ERmany;startFill=0;endFill=0;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="400" y="-810" as="sourcePoint" />
+            <mxPoint x="400" y="-710" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eyYb9vlLRyHli3wz3cNn-27" connectable="0" parent="eyYb9vlLRyHli3wz3cNn-26" style="edgeLabel;resizable=0;html=1;;align=center;verticalAlign=middle;" value="categorized as" vertex="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

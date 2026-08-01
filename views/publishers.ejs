@@ -6,7 +6,37 @@
 
 <main>
 
+    <h2>Publishers</h2>
+
+    <div id="publishers-container" class="row g-3"></div>
+
 </main>
+
+</div>
+
+<script>
+
+fetch("/api/publishers")
+    .then(res => res.json())
+    .then(publishers => {
+
+        const container =
+            document.getElementById("publishers-container");
+
+        publishers.forEach(pub => {
+
+            container.innerHTML += `
+
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="card shadow-sm p-3">
+                        <h5>${pub.name}</h5>
+                    </div>
+                </div>
+            `;
+        });
+    });
+
+</script>
 
 
 <%- include("partials/footer") %>

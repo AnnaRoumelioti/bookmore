@@ -4,9 +4,48 @@
 
 <%- include("partials/sidebar") %>
 
-<main>
+
+  <main class="container mt-4">
+
+    <h2 id="category-title"><%= category %></h2>
+
+    <div id="books-container" class="row g-4"></div>
+
+    </div>
 
 </main>
+
+<script>
+const category = <%- JSON.stringify(category) %>;
+
+fetch(`/api/categories/${encodeURIComponent(category)}`)
+    .then(response => response.json())
+    .then(books => {
+
+        const container = document.getElementById("books-container");
+
+        books.forEach(book => {
+
+            container.innerHTML += `
+                <div class="col-xl-3 col-lg-4 col-md-6 mb-4">
+                    <div class="card book-card shadow-sm">
+                        <img
+                            src="/${book.cover_image_url}"
+                            class="card-img-top"
+                            alt="${book.title}">
+                        <div class="card-body">
+                            <h5 class="card-title">${book.title}</h5>
+                            <p class="text-muted">${book.authors}</p>
+                            <h6>€${book.price}</h6>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+    })
+    .catch(console.error);
+
+</script>
 
 
 <%- include("partials/footer") %>

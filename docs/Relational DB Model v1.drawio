@@ -1,0 +1,52 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Page-1" id="-cLq7EC3mj6xT9vuQBYV">
+    <mxGraphModel dx="1414" dy="777" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="CVc-7zOY-RKBLnvMQb1h-2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;" value="books&lt;br&gt;-------------------------&lt;br&gt;PK_id&lt;br&gt;title&lt;br&gt;isbn&lt;br&gt;description&lt;br&gt;price&lt;br&gt;publication_year&lt;div&gt;language&lt;br&gt;&lt;div&gt;coverImage_url&amp;nbsp;&lt;/div&gt;&lt;div&gt;format&lt;br&gt;stock_quantity&lt;/div&gt;&lt;/div&gt;&lt;div&gt;FK_publisher_id&lt;/div&gt;" vertex="1">
+          <mxGeometry height="290" width="150" x="450" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="CVc-7zOY-RKBLnvMQb1h-3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;" value="&lt;br&gt;authors&lt;br&gt;------------------&lt;br&gt;PK_id&amp;nbsp;&lt;div&gt;first_name&amp;nbsp;&lt;br&gt;&amp;nbsp;last_name&lt;/div&gt;&lt;div&gt;slug&amp;nbsp;&lt;br&gt;&amp;nbsp;biography&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="210" width="130" x="180" y="65" as="geometry" />
+        </mxCell>
+        <mxCell id="CVc-7zOY-RKBLnvMQb1h-4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;" value="&amp;nbsp;publishers&lt;br&gt;------------------&lt;br&gt;PK_id&amp;nbsp;&lt;div&gt;&amp;nbsp;name&amp;nbsp;&lt;br&gt;&amp;nbsp;country&amp;nbsp;&lt;/div&gt;&lt;div&gt;website_url&amp;nbsp;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="210" width="140" x="740" y="65" as="geometry" />
+        </mxCell>
+        <mxCell id="CVc-7zOY-RKBLnvMQb1h-5" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;" value="&lt;br&gt;Categories&amp;nbsp;&lt;br&gt;--------------------&lt;div&gt;PK_id&amp;nbsp;&lt;br&gt;name&amp;nbsp;&lt;br&gt;description&lt;br&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="150" width="120" x="465" y="460" as="geometry" />
+        </mxCell>
+        <mxCell id="CVc-7zOY-RKBLnvMQb1h-6" edge="1" parent="1" style="endArrow=ERmany;html=1;rounded=0;startArrow=ERmany;startFill=0;endFill=0;strokeWidth=2;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="330" y="370" />
+            </Array>
+            <mxPoint x="280" y="280" as="sourcePoint" />
+            <mxPoint x="440" y="210" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="CVc-7zOY-RKBLnvMQb1h-9" edge="1" parent="1" style="endArrow=ERmany;html=1;rounded=0;strokeWidth=2;startArrow=ERmany;startFill=0;endFill=0;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="720" y="460" />
+            </Array>
+            <mxPoint x="560" y="350" as="sourcePoint" />
+            <mxPoint x="590" y="490" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="CVc-7zOY-RKBLnvMQb1h-11" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;" value="book_authors&lt;br&gt;&lt;span&gt;---------------------&lt;/span&gt;&lt;div&gt;PK, FK_book_id&lt;br&gt;PK, FK_author_id&lt;span&gt;&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="140" width="130" x="260" y="370" as="geometry" />
+        </mxCell>
+        <mxCell id="CVc-7zOY-RKBLnvMQb1h-12" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;" value="book_categories&lt;div&gt;&lt;span&gt;----------------------&lt;/span&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;PK, FK_book_id&lt;br&gt;PK, FK_category_id&lt;span&gt;&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="200" width="140" x="730" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="CVc-7zOY-RKBLnvMQb1h-13" edge="1" parent="1" style="fontSize=12;html=1;endArrow=ERoneToMany;rounded=0;strokeWidth=2;" value="">
+          <mxGeometry height="100" relative="1" width="100" as="geometry">
+            <mxPoint x="730" y="150" as="sourcePoint" />
+            <mxPoint x="610" y="210" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

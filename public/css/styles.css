@@ -297,6 +297,33 @@ h3 span {
   margin-bottom: 0;
 }
 
+.book-card {
+  height: 100%;
+}
+
+.book-card img {
+  height: 320px;
+  object-fit: contain;
+  margin-top: 5%;
+}
+
+.book-card .card-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.book-card h5 {
+  min-height: 10px;
+}
+
+.book-card h6 {
+  margin-top: auto;
+  font-weight: bold;
+}
+
+.text-muted {
+  margin: 0 0 30px;
+}
 
 
 @media (max-width: 991px) {
