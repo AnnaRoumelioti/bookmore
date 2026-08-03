@@ -8,7 +8,7 @@
 
     <h2>Publishers</h2>
 
-    <div id="publishers-container" class="row g-3"></div>
+    <div id="publishers-container"></div>
 
 </main>
 
@@ -19,22 +19,37 @@
 fetch("/api/publishers")
     .then(res => res.json())
     .then(publishers => {
-
         const container =
             document.getElementById("publishers-container");
+        container.innerHTML = "";
 
+        let currentLetter = "";
         publishers.forEach(pub => {
+            const firstLetter =
+                pub.name.charAt(0).toUpperCase();
+            if (firstLetter !== currentLetter) {
+                currentLetter = firstLetter;
 
-            container.innerHTML += `
+                container.innerHTML += `
+                    <h3 class="publisher-letter">
+                        ${currentLetter}
+                    </h3>
+                    <div id="group-${currentLetter}"></div>
+                `;
+            }
 
-                <div class="col-lg-3 col-md-4 col-sm-6">
-                    <div class="card shadow-sm p-3">
-                        <h5>${pub.name}</h5>
-                    </div>
-                </div>
-            `;
+            document.getElementById(`group-${currentLetter}`)
+                .innerHTML += `
+                    <p>
+                        <a href="/publishers/${pub.id}"
+                           class="publisher-link">
+                            ${pub.name}
+                        </a>
+                    </p>
+                `;
         });
-    });
+    })
+    .catch(error => console.error(error));
 
 </script>
 

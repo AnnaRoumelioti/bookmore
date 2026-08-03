@@ -1,6 +1,8 @@
 const express = require("express");
 const categoryRoutes = require("./routes/categories");
 const publisherRoutes = require("./routes/publishers");
+const bookRoutes = require("./routes/book");
+
 
 const app = express();
 const PORT = 3000;
@@ -58,11 +60,36 @@ app.get("/publishers", (req, res) => {
 
 });
 
+app.get("/publishers/:id", (req, res) => {
+
+    res.render("publisher", {
+        publisherId: req.params.id
+    });
+
+});
+
+
+app.get("/book/:id", (req, res) => {
+
+    res.render("book", {
+        id: req.params.id
+    });
+
+});
+
+app.get("/book/:id", (req, res) => {
+
+    res.render("book", {
+        bookId: req.params.id
+    });
+
+});
 
 
 
 app.use("/api/categories", categoryRoutes);
 app.use("/api/publishers", publisherRoutes);
+app.use("/api/books", bookRoutes);
 
 
 

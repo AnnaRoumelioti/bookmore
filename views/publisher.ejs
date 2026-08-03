@@ -1,0 +1,84 @@
+<%- include("partials/header") %>
+
+    <%- include("partials/navigation") %>
+
+        <%- include("partials/sidebar") %>
+
+            <main class="container mt-4">
+
+                <div id="publisher-container"></div>
+                  </div>
+
+            </main>
+
+            <script>
+
+                const publisherId = "<%= publisherId %>";
+
+                fetch(`/api/publishers/${publisherId}`)
+                    .then(response => response.json())
+                    .then(data => {
+
+                        console.log(data);
+
+                        const container = document.getElementById("publisher-container");
+
+                        container.innerHTML = `
+                       <div class="publisher-header">
+
+                        <h2>${data.publisher.name}</h2>
+
+                            <p>
+                             ${data.publisher.country ?? ""}
+                            </p>
+
+                        <a href="${data.publisher.website_url ?? "#"}"
+                            target="_blank"
+                            class="links">
+
+                           ${data.publisher.website_url ?? ""} </a>
+
+    </div>
+
+    <div class="separator"></div>
+
+    <h3 class="books-title">
+        Books published by ${data.publisher.name}
+    </h3>
+
+    <div id="books-container" class="row g-4 mt-1"></div>
+`;
+
+                        const booksContainer =
+                            document.getElementById("books-container");
+
+                        data.books.forEach(book => {
+
+                            booksContainer.innerHTML += `
+
+        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6">
+          <a href="/book/${book.id}" class="book-link">
+            <div class="card h-100 shadow-sm">
+                <img
+                    src="/${book.cover_image_url}"
+                    class="books-img"
+                    alt="${book.title}">
+
+                <div class="card-body">
+                     <h5 class="card-title">${book.title}</h5>
+                     <p class="text-muted">${book.authors}</p>
+
+                    <h6>€${book.price}</h6>
+                </div>
+            </div>
+            </a>
+        </div>
+    `;
+
+                        });
+                    });
+
+            </script>
+
+
+            <%- include("partials/footer") %>
