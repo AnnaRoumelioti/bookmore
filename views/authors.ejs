@@ -1,0 +1,55 @@
+<%- include("partials/header") %>
+
+<%- include("partials/navigation") %>
+
+<%- include("partials/sidebar") %>
+
+<main>
+    <h2 id="authors-title">Authors</h2>
+
+    <div id="authors-container"></div>
+</div>
+
+</main>
+
+<%- include("partials/footer") %>
+
+<script>
+ fetch("/api/authors")
+    .then(response => response.json())
+    .then(authors => {
+
+        const container = document.getElementById("authors-container");
+  let currentLetter = "";
+
+authors.forEach(author => {
+
+    const firstLetter = author.last_name.charAt(0).toUpperCase();
+
+    if (firstLetter !== currentLetter) {
+
+        currentLetter = firstLetter;
+
+        container.innerHTML += `
+            <h3 class="alllist-letter">
+                        ${currentLetter}
+                    </h3>
+                    <div id="group-${currentLetter}"></div>
+        `;
+    }
+
+document.getElementById(`group-${currentLetter}`)
+                .innerHTML += `
+                  <p>
+                   <a href="/author/${author.slug}" class="alllist-link">
+                   ${author.last_name}, ${author.first_name}
+                   </a>
+                </p>
+               `;
+
+});
+    })
+        .catch(err => console.error(err));
+
+
+</script>

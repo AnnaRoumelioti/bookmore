@@ -6,17 +6,107 @@
 
 <main>
 
-<div id="book-container"></div>
+<div class="container mt-4">
+
+    <div id="book-details" class="book-details"></div>
+
+</div>
+</div>
 
 </main>
-
 
 <%- include("partials/footer") %>
 
 <script>
 
-const id = "<%= id %>";
+const bookId = "<%= bookId %>";
 
-console.log(id);
+fetch(`/api/books/${bookId}`)
+    .then(res => res.json())
+    .then(book => {
+
+        console.log(book);
+
+        document.getElementById("book-details").innerHTML = `
+
+            <div class="book-layout">
+
+                <div class="book-cover">
+
+                    <img
+                        src="/${book.cover_image_url}"
+                        alt="${book.title}"
+                        class="book-image">
+
+                </div>
+
+                <div class="book-info">
+
+                    <h2>${book.title}</h2>
+
+                    <p>
+                        <strong>Author:</strong>
+                        <a href="/authors/${book.author_slug}">
+                            ${book.authors}
+                        </a>
+                    </p>
+
+                    <p>
+                        <strong>Publisher:</strong>
+                        <a href="/publishers/${book.publisher_slug}">
+                            ${book.publisher_name}
+                        </a>
+                    </p>
+
+                    <p><strong>ISBN:</strong> ${book.isbn}</p>
+
+                    <p><strong>Publication year:</strong> ${book.publication_year}</p>
+
+                    <p><strong>Language:</strong> ${book.book_language}</p>
+
+                    <p><strong>Format:</strong> ${book.format}</p>
+
+                    <p>
+                        <strong>Availability:</strong>
+
+                        ${
+                            book.stock_quantity > 0
+                                ? "In stock"
+                                : "Out of stock"
+                        }
+
+                    </p>
+
+                    <h3 class="book-price">
+                        €${book.price}
+                    </h3>
+
+                    <div class="book-buttons">
+
+                        <button class="book-buttons-cart">
+                            Add to Cart
+                        </button>
+
+                        <button class="book-buttons-fav">
+                            Add to Favorites
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div>
+
+                <h3>Description</h3>
+
+                <p>${book.description}</p>
+
+            </div>
+
+        `;
+
+    });
 
 </script>

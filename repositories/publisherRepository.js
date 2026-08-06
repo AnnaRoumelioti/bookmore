@@ -6,6 +6,7 @@ async function getAllPublishers() {
         SELECT
             id,
             name,
+            slug,
             country,
             website_url
         FROM publishers
@@ -15,20 +16,23 @@ async function getAllPublishers() {
     return result.rows;
 }
 
-async function getPublisherWithBooks(id) {
+async function getPublisherWithBooks(slug) {
 
     const publisherResult = await pool.query(
         `
         SELECT
             id,
             name,
+            slug,
             country,
             website_url
         FROM publishers
-        WHERE id = $1
+        WHERE slug = $1
         `,
-        [id]
+        [slug]
     );
+
+    const publisherId = publisherResult.rows[0].id;
 
     const booksResult = await pool.query(
         `
@@ -56,7 +60,7 @@ async function getPublisherWithBooks(id) {
 
         ORDER BY b.title
         `,
-        [id]
+        [publisherId]
     );
 
     return {

@@ -26,7 +26,7 @@ async function getPublisher(req, res) {
     try {
 
         const publisher =
-            await service.getPublisherWithBooks(req.params.id);
+            await service.getPublisherWithBooks(req.params.slug);
 
         res.json(publisher);
 

@@ -31,7 +31,7 @@ fetch("/api/publishers")
                 currentLetter = firstLetter;
 
                 container.innerHTML += `
-                    <h3 class="publisher-letter">
+                    <h3 class="alllist-letter">
                         ${currentLetter}
                     </h3>
                     <div id="group-${currentLetter}"></div>
@@ -41,8 +41,8 @@ fetch("/api/publishers")
             document.getElementById(`group-${currentLetter}`)
                 .innerHTML += `
                     <p>
-                        <a href="/publishers/${pub.id}"
-                           class="publisher-link">
+                        <a href="/publishers/${pub.slug}"
+                           class="alllist-link">
                             ${pub.name}
                         </a>
                     </p>

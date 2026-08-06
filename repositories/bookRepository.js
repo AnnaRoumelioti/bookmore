@@ -1,7 +1,6 @@
 const pool = require("../config/db");
 
 async function getBookById(id) {
-
     const result = await pool.query(
         `
         SELECT
@@ -15,21 +14,31 @@ async function getBookById(id) {
             b.format,
             b.stock_quantity,
             b.cover_image_url,
-            p.id AS publisher_id,
-            p.name AS publisher,
-            STRING_AGG(a.full_name, ', ') AS authors
+
+            p.name AS publisher_name,
+            p.slug AS publisher_slug,
+
+            STRING_AGG(a.full_name, ', ' ORDER BY a.full_name) AS authors,
+            
+            MIN(a.slug) AS author_slug
+
         FROM books b
-        JOIN publishers p
-            ON p.id = b.publisher_id
-        JOIN book_authors ba
-            ON ba.book_id = b.id
-        JOIN authors a
-            ON a.id = ba.author_id
+
+        LEFT JOIN publishers p
+            ON b.publisher_id = p.id
+
+        LEFT JOIN book_authors ba
+            ON b.id = ba.book_id
+
+        LEFT JOIN authors a
+            ON ba.author_id = a.id
+
         WHERE b.id = $1
+
         GROUP BY
             b.id,
-            p.id,
-            p.name
+            p.name,
+            p.slug;
         `,
         [id]
     );
