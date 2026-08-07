@@ -4,9 +4,53 @@
 
 <%- include("partials/sidebar") %>
 
-<main>
+<main class="container mt-4">
+
+            <div class="page-header">
+
+                <h2>New Items</h2>
+
+                <p>
+                    The newest books in our bookstore
+                </p>
+
+            </div>
+
+            <div class="separator"></div>
+
+            <div
+                id="books-container"
+                class="row g-4 mt-1">
+            </div>
+
 
 </main>
+</div>
+
+<script src="/js/renderBooks.js"></script>
+
+<script>
+
+    fetch("/api/books/latest")
+
+        .then(response => response.json())
+
+        .then(books => {
+
+            const container =
+                document.getElementById("books-container");
+
+            renderBooks(container, books);
+
+        })
+
+        .catch(error => {
+
+            console.error(error);
+
+        });
+
+</script>
 
 
 <%- include("partials/footer") %>
