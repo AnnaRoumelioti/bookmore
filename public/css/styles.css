@@ -467,6 +467,39 @@ h3 span {
   margin: 12px;
 }
 
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  max-width: 320px;
+  margin: 20px 0;
+}
+
+.auth-form input {
+  width: 100%;
+  line-height: 30px;
+  padding: 0 8px;
+  border: 1px solid var(--brand-primary);
+  background-color: #fff;
+}
+
+.auth-form button[type="submit"] {
+  margin-top: 10px;
+}
+
+.header-top > div {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}
+
+.section-title {
+  display: block;
+  color: var(--brand-dark);
+  text-align: start;
+  line-height: normal;
+  margin: 25px 0 10px;
 /* Homepage book sliders */
 
 .homepage-books-section {

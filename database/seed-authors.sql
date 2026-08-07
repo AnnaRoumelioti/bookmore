@@ -437,7 +437,7 @@ VALUES
 
 ('Shannon Merenstein',
 'shannon-merenstein',
-'Shannon Merenstein is an American artist, educator and author specialising in creative activities for children. Through her books and workshops, she encourages young artists to experiment with different materials, develop their creativity and enjoy the process of making art in fun and imaginative ways.')
+'Shannon Merenstein is an American artist, educator and author specialising in creative activities for children. Through her books and workshops, she encourages young artists to experiment with different materials, develop their creativity and enjoy the process of making art in fun and imaginative ways.'),
 
 ('Alastair Smith',
 'alastair-smith',
@@ -473,7 +473,7 @@ VALUES
 
 ('Bryan A. Garner',
 'bryan-a-garner',
-'Bryan A. Garner is an American legal scholar, lexicographer and author recognized for his expertise in legal writing and language. He is the editor of Black''s Law Dictionary and has written numerous influential works that help legal professionals communicate with greater clarity and precision.')
+'Bryan A. Garner is an American legal scholar, lexicographer and author recognized for his expertise in legal writing and language. He is the editor of Black''s Law Dictionary and has written numerous influential works that help legal professionals communicate with greater clarity and precision.'),
 
 
 ('Bill Bryson',

@@ -70,6 +70,9 @@ VALUES
 ('Pearson', 'United Kingdom', 'https://www.pearson.com'),
 ('O''Reilly Media', 'United States', 'https://www.oreilly.com');
 
+UPDATE publishers
+SET slug = TRIM(BOTH '-' FROM LOWER(REGEXP_REPLACE(name, '[^a-zA-Z0-9]+', '-', 'g')));
+
 
 
 

@@ -3,6 +3,7 @@
 CREATE TABLE publishers (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
+    slug VARCHAR(255),
     country VARCHAR(100),
     website_url VARCHAR(255)
 );
@@ -38,7 +39,7 @@ CREATE TABLE books (
     book_language VARCHAR(50) NOT NULL,
     cover_image_url VARCHAR(255),
     format VARCHAR(20) NOT NULL
-        CHECK (format IN ('Paperback', 'Hardcover', 'E-book')),
+        CHECK (format IN ('Paperback', 'Hardcover', 'E-book', 'E-books', 'Comic')),
     stock_quantity INTEGER NOT NULL
         CHECK (stock_quantity >= 0),
     publisher_id INTEGER NOT NULL,
