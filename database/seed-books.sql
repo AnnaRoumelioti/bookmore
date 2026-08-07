@@ -977,7 +977,7 @@ VALUES
     15,
     'images/books/dark-knights-rising.jpg',
     (SELECT id FROM publishers WHERE name='DC Comics')
-);
+),
 
 /* Grant Morrison */
  (

@@ -1,0 +1,44 @@
+<%- include("partials/header") %>
+
+<%- include("partials/navigation") %>
+
+<%- include("partials/sidebar") %>
+
+<main class="container mt-4">
+
+  <h2>Sign up</h2>
+
+  <p id="signup-error" class="text-danger" style="display: none;">Email already registered</p>
+
+  <form method="POST" action="/auth/signup" class="auth-form">
+
+    <label for="full_name">Full name</label>
+    <input type="text" id="full_name" name="full_name" required>
+
+    <label for="email">Email</label>
+    <input type="email" id="email" name="email" required>
+
+    <label for="password">Password</label>
+    <input type="password" id="password" name="password" required>
+
+    <button type="submit">Sign up</button>
+
+  </form>
+
+  <p>Already have an account? <a href="/login">Login</a></p>
+
+  </div>
+
+</main>
+
+<script>
+
+if (window.location.search.includes("error=1")) {
+
+    document.getElementById("signup-error").style.display = "block";
+
+}
+
+</script>
+
+<%- include("partials/footer") %>

@@ -1,0 +1,104 @@
+<%- include("partials/header") %>
+
+<%- include("partials/navigation") %>
+
+<%- include("partials/sidebar") %>
+
+<main class="container mt-4">
+
+  <h2><%= user.full_name %></h2>
+
+  <p><%= user.email %></p>
+
+  <h3 class="section-title">Purchased books</h3>
+
+  <div id="purchases-container"></div>
+
+  <h3 class="section-title">Favorites</h3>
+
+  <div id="favorites-container" class="row g-4"></div>
+
+  </div>
+
+</main>
+
+<script src="/js/renderBooks.js"></script>
+
+<script>
+
+fetch("/api/purchases")
+    .then(response => response.json())
+    .then(purchases => {
+
+        const container = document.getElementById("purchases-container");
+
+        if (purchases.length === 0) {
+
+            container.innerHTML = "<p>No purchases yet</p>";
+
+            return;
+
+        }
+
+        let rows = "";
+
+        purchases.forEach(purchase => {
+
+            rows += `
+                <tr>
+
+                    <td>
+                        <a href="/book/${purchase.book_id}" class="book-link">
+                            ${purchase.title}
+                        </a>
+                    </td>
+
+                    <td>${purchase.quantity}</td>
+
+                    <td>€${purchase.price}</td>
+
+                    <td>${new Date(purchase.purchased_at).toLocaleDateString()}</td>
+
+                </tr>
+            `;
+
+        });
+
+        container.innerHTML = `
+
+            <table class="table align-middle">
+
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    ${rows}
+                </tbody>
+
+            </table>
+
+        `;
+
+    })
+    .catch(console.error);
+
+fetch("/api/favorites")
+    .then(response => response.json())
+    .then(books => {
+
+        const container = document.getElementById("favorites-container");
+
+        renderBooks(container, books);
+
+    })
+    .catch(console.error);
+
+</script>
+
+<%- include("partials/footer") %>

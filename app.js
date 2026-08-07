@@ -1,9 +1,15 @@
 const express = require("express");
+const session = require("express-session");
 const categoryRoutes = require("./routes/categories");
 const publisherRoutes = require("./routes/publishers");
 const bookRoutes = require("./routes/book");
 const authorsRoutes = require("./routes/authors");
 const searchRoutes = require("./routes/search");
+const authRoutes = require("./routes/auth");
+const favoritesRoutes = require("./routes/favorites");
+const cartRoutes = require("./routes/cart");
+const purchasesRoutes = require("./routes/purchases");
+const { requireLoginPage, requireLoginApi } = require("./middleware/auth");
 
 
 
@@ -14,6 +20,24 @@ const PORT = 3000;
 app.use(express.static("public"));
 
 app.set("view engine", "ejs");
+
+app.use(express.urlencoded({ extended: true }));
+
+app.use(express.json());
+
+app.use(session({
+    secret: "bookmore-secret",
+    resave: false,
+    saveUninitialized: false
+}));
+
+app.use((req, res, next) => {
+
+    res.locals.user = req.session.user || null;
+
+    next();
+
+});
 
 app.get("/", (req, res) => {
     res.render("index");
@@ -31,8 +55,6 @@ const infoPages = [
 ];
 
 const shopPages = [
-    "cart",
-    "favorites",
     "looking-book",
     "new-items",
     "promotions",
@@ -45,6 +67,27 @@ const shopPages = [
     app.get(`/${page}`, (req, res) => {
         res.render(page);
     });
+});
+
+
+app.get("/login", (req, res) => {
+    res.render("login");
+});
+
+app.get("/signup", (req, res) => {
+    res.render("signup");
+});
+
+app.get("/profile", requireLoginPage, (req, res) => {
+    res.render("profile");
+});
+
+app.get("/favorites", requireLoginPage, (req, res) => {
+    res.render("favorites");
+});
+
+app.get("/cart", requireLoginPage, (req, res) => {
+    res.render("cart");
 });
 
 
@@ -105,6 +148,10 @@ app.use("/api/publishers", publisherRoutes);
 app.use("/api/books", bookRoutes);
 app.use("/api/authors", authorsRoutes);
 app.use("/api/search", searchRoutes);
+app.use("/auth", authRoutes);
+app.use("/api/favorites", requireLoginApi, favoritesRoutes);
+app.use("/api/cart", requireLoginApi, cartRoutes);
+app.use("/api/purchases", requireLoginApi, purchasesRoutes);
 
 
 

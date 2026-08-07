@@ -4,9 +4,99 @@
 
 <%- include("partials/sidebar") %>
 
-<main>
+<main class="container mt-4">
+
+  <h2>Cart</h2>
+
+  <div id="cart-container"></div>
+
+  </div>
 
 </main>
 
+<script>
+
+fetch("/api/cart")
+    .then(response => response.json())
+    .then(items => {
+
+        const container = document.getElementById("cart-container");
+
+        if (items.length === 0) {
+
+            container.innerHTML = "<p>Your cart is empty</p>";
+
+            return;
+
+        }
+
+        let total = 0;
+
+        let rows = "";
+
+        items.forEach(item => {
+
+            const subtotal = item.price * item.quantity;
+
+            total += subtotal;
+
+            rows += `
+                <tr>
+
+                    <td>
+                        <a href="/book/${item.id}" class="book-link">
+                            ${item.title}
+                        </a>
+                    </td>
+
+                    <td>€${item.price}</td>
+
+                    <td>${item.quantity}</td>
+
+                    <td>€${subtotal.toFixed(2)}</td>
+
+                    <td>
+                        <button class="button" onclick="removeFromCart(${item.id})">
+                            Remove
+                        </button>
+                    </td>
+
+                </tr>
+            `;
+
+        });
+
+        container.innerHTML = `
+
+            <table class="table align-middle">
+
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Subtotal</th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    ${rows}
+                </tbody>
+
+            </table>
+
+            <h3 class="section-title">Total: €${total.toFixed(2)}</h3>
+
+            <button class="button" onclick="checkout()">
+                Checkout
+            </button>
+
+        `;
+
+    })
+    .catch(console.error);
+
+</script>
 
 <%- include("partials/footer") %>
