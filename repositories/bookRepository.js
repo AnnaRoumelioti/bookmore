@@ -46,6 +46,96 @@ async function getBookById(id) {
     return result.rows[0];
 }
 
+async function getLatestBooks() {
+
+    const result = await pool.query(`
+        SELECT
+            b.id,
+            b.title,
+            b.price,
+            b.cover_image_url,
+
+            STRING_AGG(
+                a.full_name,
+                ', '
+                ORDER BY a.full_name
+            ) AS authors
+
+        FROM books b
+
+        LEFT JOIN book_authors ba
+            ON b.id = ba.book_id
+
+        LEFT JOIN authors a
+            ON ba.author_id = a.id
+
+        GROUP BY
+            b.id,
+            b.title,
+            b.price,
+            b.cover_image_url
+
+        ORDER BY b.id DESC
+
+        LIMIT 20
+    `);
+
+    return result.rows;
+}
+
+async function incrementBookViews(id) {
+
+    await pool.query(
+        `
+        UPDATE books
+        SET view_count = view_count + 1
+        WHERE id = $1
+        `,
+        [id]
+    );
+
+}
+
+async function getRecommendedBooks() {
+
+    const result = await pool.query(`
+        SELECT
+            b.id,
+            b.title,
+            b.price,
+            b.cover_image_url,
+
+            STRING_AGG(
+                a.full_name,
+                ', '
+                ORDER BY a.full_name
+            ) AS authors
+
+        FROM books b
+
+        LEFT JOIN book_authors ba
+            ON b.id = ba.book_id
+
+        LEFT JOIN authors a
+            ON ba.author_id = a.id
+
+        GROUP BY
+            b.id,
+            b.title,
+            b.price,
+            b.cover_image_url
+
+        ORDER BY b.view_count DESC
+
+        LIMIT 20
+    `);
+
+    return result.rows;
+}
+
 module.exports = {
-    getBookById
+    getBookById,
+    getLatestBooks,
+    incrementBookViews,
+    getRecommendedBooks
 };
