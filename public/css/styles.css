@@ -62,6 +62,7 @@ input {
   border-radius: 5px;
   width: 30%;
   outline: none;
+  padding: 0 10px;
 }
 
 .button,
@@ -281,6 +282,7 @@ h3 span {
   border-radius: 5px;
   width: fit-content;
   line-height: 40px;
+  padding: 0 10px;
 }
 
 .footer-text {
@@ -474,21 +476,39 @@ h3 span {
 .auth-form {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 5px;
   max-width: 320px;
-  margin: 20px 0;
+  margin: 20px auto;
 }
 
 .auth-form input {
   width: 100%;
   line-height: 30px;
-  padding: 0 8px;
+  padding: 0 10px;
   border: 1px solid var(--brand-primary);
   background-color: #fff;
 }
 
 .auth-form button[type="submit"] {
   margin-top: 10px;
+  background-color: var(--brand-light);
+  color: var(--brand-dark);
+}
+
+.auth-form button[type="submit"]:hover {
+  background-color: var(--brand-dark);
+  color: var(--brand-light);
+}
+
+.field-error {
+  margin: 4px 0 10px;
+  font-size: 13px;
+  color: #c0392b;
+}
+
+.auth-container>p {
+  text-align: center;
 }
 
 .header-top>div {
@@ -503,10 +523,8 @@ h3 span {
   color: var(--brand-dark);
   text-align: start;
   line-height: normal;
-  margin: 25px 0 10px;
+  margin: 50px 0 20px;
 }
-
-/* Homepage book sliders */
 
 .homepage-books-section {
   display: flex;
@@ -606,7 +624,24 @@ h3 span {
   right: -15px;
 }
 
+.favorite-message {
+  position: absolute;
+  padding: 8px 12px;
+  background-color: #7B6D8D;
+  color: white;
+  border-radius: 5px;
+  font-size: 13px;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease;
+  z-index: 9999;
+}
 
+.favorite-message.show {
+  opacity: 1;
+  visibility: visible;
+}
 
 
 
@@ -698,8 +733,8 @@ h3 span {
   }
 
   .book-carousel-card {
-  flex: 0 0 calc(30% - 12px);
-}
+    flex: 0 0 calc(30% - 12px);
+  }
 }
 
 
@@ -762,8 +797,8 @@ h3 span {
   }
 
   .book-carousel-card {
-  flex: 0 0 calc(35% - 12px);
-}
+    flex: 0 0 calc(35% - 12px);
+  }
 }
 
 
@@ -814,11 +849,11 @@ h3 span {
     margin-left: 80px;
   }
 
-    .book-carousel-card {
-  flex: 0 0 calc(55% - 12px);
-}
+  .book-carousel-card {
+    flex: 0 0 calc(55% - 12px);
+  }
 
   .book-carousel-image {
-  height: 100px;
-}
+    height: 100px;
+  }
 }

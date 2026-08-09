@@ -7,37 +7,181 @@
 <main class="container mt-4">
 
   <h2>Sign up</h2>
-
+<divc class="auth-container">
   <p id="signup-error" class="text-danger" style="display: none;">Email already registered</p>
 
   <form method="POST" action="/auth/signup" class="auth-form">
 
     <label for="full_name">Full name</label>
     <input type="text" id="full_name" name="full_name" required>
+    <p id="full-name-error" class="field-error"></p>
 
     <label for="email">Email</label>
     <input type="email" id="email" name="email" required>
+    <p id="email-error" class="field-error"></p>
 
     <label for="password">Password</label>
     <input type="password" id="password" name="password" required>
+    <p id="password-error" class="field-error"></p>
 
     <button type="submit">Sign up</button>
 
   </form>
 
-  <p>Already have an account? <a href="/login">Login</a></p>
-
+  <p>Already have an account? <a href="/login" class="links">Login</a></p>
+   </div>
   </div>
 
 </main>
 
 <script>
 
-if (window.location.search.includes("error=1")) {
+    const form = document.querySelector(".auth-form");
 
-    document.getElementById("signup-error").style.display = "block";
+    const fullName =
+        document.getElementById("full_name");
 
-}
+    const email =
+        document.getElementById("email");
+
+    const password =
+        document.getElementById("password");
+
+
+    const fullNameError =
+        document.getElementById("full-name-error");
+
+    const emailError =
+        document.getElementById("email-error");
+
+    const passwordError =
+        document.getElementById("password-error");
+
+
+    const nameRegex =
+        /^[A-Za-zΑ-Ωα-ωΆ-Ώά-ώ\s'-]+$/;
+
+    const emailRegex =
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    const passwordRegex =
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+
+
+    function validateFullName() {
+
+        const value = fullName.value.trim();
+
+        if (value === "") {
+
+            fullNameError.textContent =
+                "Full name is required.";
+
+            return false;
+        }
+
+        if (!nameRegex.test(value)) {
+
+            fullNameError.textContent =
+                "Please enter a valid full name.";
+
+            return false;
+        }
+
+        fullNameError.textContent = "";
+
+        return true;
+    }
+
+
+    function validateEmail() {
+
+        const value = email.value.trim();
+
+        if (value === "") {
+
+            emailError.textContent =
+                "Email is required.";
+
+            return false;
+        }
+
+        if (!emailRegex.test(value)) {
+
+            emailError.textContent =
+                "Please enter a valid email address.";
+
+            return false;
+        }
+
+        emailError.textContent = "";
+
+        return true;
+    }
+
+
+    function validatePassword() {
+
+        const value = password.value;
+
+        if (value === "") {
+
+            passwordError.textContent =
+                "Password is required.";
+
+            return false;
+        }
+
+        if (!passwordRegex.test(value)) {
+
+            passwordError.textContent =
+                "Password must contain at least 8 characters, " +
+                "one uppercase letter, one lowercase letter, " +
+                "and one number.";
+
+            return false;
+        }
+
+        passwordError.textContent = "";
+
+        return true;
+    }
+
+
+    /* Check immediately while typing */
+
+    fullName.addEventListener("input", validateFullName);
+
+    email.addEventListener("input", validateEmail);
+
+    password.addEventListener("input", validatePassword);
+
+
+    /* Final check before submitting */
+
+    form.addEventListener("submit", function(event) {
+
+        const validName = validateFullName();
+        const validEmail = validateEmail();
+        const validPassword = validatePassword();
+
+        if (!validName || !validEmail || !validPassword) {
+
+            event.preventDefault();
+
+        }
+
+    });
+
+
+    /* Server-side signup error */
+
+    if (window.location.search.includes("error=1")) {
+
+        document.getElementById("signup-error")
+            .style.display = "block";
+
+    }
 
 </script>
 

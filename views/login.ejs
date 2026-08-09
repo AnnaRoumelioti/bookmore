@@ -1,41 +1,159 @@
 <%- include("partials/header") %>
 
-<%- include("partials/navigation") %>
+  <%- include("partials/navigation") %>
 
-<%- include("partials/sidebar") %>
+    <%- include("partials/sidebar") %>
 
-<main class="container mt-4">
+      <main class="container mt-4">
 
-  <h2>Login</h2>
+        <h2>Login</h2>
+     <div class="auth-container">
+        <p id="login-error" class="field-error" style="display: none;">Invalid email or password</p>
 
-  <p id="login-error" class="text-danger" style="display: none;">Invalid email or password</p>
+        <form method="POST" action="/auth/login" class="auth-form">
 
-  <form method="POST" action="/auth/login" class="auth-form">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required>
+          <p id="login-email-error" class="field-error"></p>
 
-    <label for="email">Email</label>
-    <input type="email" id="email" name="email" required>
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" required>
+          <p id="login-email-error" class="field-error"></p>
 
-    <label for="password">Password</label>
-    <input type="password" id="password" name="password" required>
+          <button type="submit">Login</button>
 
-    <button type="submit">Login</button>
+        </form>
 
-  </form>
+        <p>No account yet? <a href="/signup" class="links">Sign up</a></p>
+        </div>
+        </div>
 
-  <p>No account yet? <a href="/signup">Sign up</a></p>
+      </main>
 
-  </div>
+      <script>
 
-</main>
+        const loginForm =
+          document.querySelector(".auth-form");
 
-<script>
+        const loginEmail =
+          document.getElementById("email");
 
-if (window.location.search.includes("error=1")) {
+        const loginPassword =
+          document.getElementById("password");
 
-    document.getElementById("login-error").style.display = "block";
 
-}
+        const loginEmailError =
+          document.getElementById("login-email-error");
 
-</script>
+        const loginPasswordError =
+          document.getElementById("login-password-error");
 
-<%- include("partials/footer") %>
+
+        const emailRegex =
+          /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+
+        function validateLoginEmail() {
+
+          const value =
+            loginEmail.value.trim();
+
+          if (value === "") {
+
+            loginEmailError.textContent =
+              "Email is required.";
+
+            return false;
+          }
+
+          if (!emailRegex.test(value)) {
+
+            loginEmailError.textContent =
+              "Please enter a valid email address.";
+
+            return false;
+          }
+
+          loginEmailError.textContent = "";
+
+          return true;
+        }
+
+
+        function validateLoginPassword() {
+
+          const value =
+            loginPassword.value;
+
+          if (value === "") {
+
+            loginPasswordError.textContent =
+              "Password is required.";
+
+            return false;
+          }
+
+          loginPasswordError.textContent = "";
+
+          return true;
+        }
+
+        loginEmail.addEventListener(
+          "input",
+          validateLoginEmail
+        );
+
+        loginPassword.addEventListener(
+          "input",
+          validateLoginPassword
+        );
+
+        loginEmail.addEventListener("input", function () {
+
+    document.getElementById("login-error")
+        .style.display = "none";
+
+});
+
+loginPassword.addEventListener("input", function () {
+
+    document.getElementById("login-error")
+        .style.display = "none";
+
+});
+
+        loginForm.addEventListener(
+          "submit",
+          function (event) {
+
+            const validEmail =
+              validateLoginEmail();
+
+            const validPassword =
+              validateLoginPassword();
+
+            if (!validEmail || !validPassword) {
+
+              event.preventDefault();
+
+            }
+
+          }
+        );
+
+        if (window.location.search.includes("error=1")) {
+
+          document.getElementById("login-error")
+            .style.display = "block";
+
+          window.history.replaceState(
+            {},
+            document.title,
+            window.location.pathname
+          );
+
+        }
+
+      </script>
+
+      <%- include("partials/footer") %>

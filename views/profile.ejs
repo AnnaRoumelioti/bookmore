@@ -5,24 +5,30 @@
 <%- include("partials/sidebar") %>
 
 <main class="container mt-4">
+  <h2>Your profile</h2>
 
-  <h2><%= user.full_name %></h2>
+  <h3 class="section-title"> Profile details</h3>
 
-  <p><%= user.email %></p>
+  <span><strong>Username: </strong><%= user.full_name %></span> <br>
+
+  <span><strong>Registered email: </strong><%= user.email %></span>
+
+  <div class="separator"></div>
 
   <h3 class="section-title">Purchased books</h3>
 
   <div id="purchases-container"></div>
 
+  <div class="separator"></div>
+
   <h3 class="section-title">Favorites</h3>
 
-  <div id="favorites-container" class="row g-4"></div>
+  <div id="favorites-container" class="row g-4" data-favorites-list="true"></div>
 
   </div>
 
 </main>
 
-<script src="/js/renderBooks.js"></script>
 
 <script>
 

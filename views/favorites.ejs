@@ -9,13 +9,11 @@
 
     <h2>Favorites</h2>
 
-    <div id="books-container" class="row g-4"></div>
+    <div id="books-container" class="row g-4" data-favorites-list="true"></div>
 
     </div>
-
+    
 </main>
-
-<script src="/js/renderBooks.js"></script>
 
 
 <script>
@@ -30,6 +28,11 @@ fetch("/api/favorites")
 
     })
     .catch(console.error);
+
+    showFavoriteMessage(
+    "Book is removed from Favorites",
+    button
+);
 
 </script>
 
