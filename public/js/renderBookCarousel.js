@@ -32,3 +32,101 @@ function renderBookCarousel(container, books) {
 
     });
 }
+
+function initBookSlider(track) {
+
+    const slider =
+        track.closest(".book-carousel");
+
+    const prevButton =
+        slider.querySelector(".book-slider-prev");
+
+    const nextButton =
+        slider.querySelector(".book-slider-next");
+
+    const card =
+        track.querySelector(".book-carousel-card");
+
+    if (!card) {
+        return;
+    }
+
+    const gap = 15;
+
+    const getCardWidth = () => {
+
+        return card.getBoundingClientRect().width + gap;
+
+    };
+
+    nextButton.addEventListener("click", () => {
+
+        track.scrollBy({
+            left: getCardWidth(),
+            behavior: "smooth"
+        });
+
+    });
+
+    prevButton.addEventListener("click", () => {
+
+        track.scrollBy({
+            left: -getCardWidth(),
+            behavior: "smooth"
+        });
+
+    });
+
+
+    let autoScroll;
+
+
+    function startAutoScroll() {
+
+        autoScroll = setInterval(() => {
+
+            const maxScroll =
+                track.scrollWidth - track.clientWidth;
+
+            if (track.scrollLeft >= maxScroll - 5) {
+
+                track.scrollTo({
+                    left: 0,
+                    behavior: "smooth"
+                });
+
+            } else {
+
+                track.scrollBy({
+                    left: getCardWidth(),
+                    behavior: "smooth"
+                });
+
+            }
+
+        }, 2000);
+
+    }
+
+
+    function stopAutoScroll() {
+
+        clearInterval(autoScroll);
+
+    }
+
+
+    slider.addEventListener(
+        "mouseenter",
+        stopAutoScroll
+    );
+
+    slider.addEventListener(
+        "mouseleave",
+        startAutoScroll
+    );
+
+
+    startAutoScroll();
+
+}

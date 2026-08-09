@@ -65,13 +65,11 @@
               <button class="book-slider-button book-slider-next" type="button">
                 ›
               </button>
-            </div>
-          </section>
-           <div>
+                         <div>
              <a href="/new-items" class="links">View all</a>
             </div>
-
-            
+            </div>
+          </section>
 
         <div><h2>Recommended</h2></div>
 
@@ -89,12 +87,12 @@
               <button class="book-slider-button book-slider-next" type="button">
                 ›
               </button>
-            </div>
-
-          </section>
-          <div>
+                <div>
             <a href="/recommended" class="links">View all</a>
           </div>
+            </div>
+          </section>
+
       </main>
       </div>
 
@@ -111,7 +109,9 @@
             const container =
               document.getElementById("new-books-carousel");
 
-            renderBookCarousel(container, books);
+            const homepageBooks = books.slice(0, 8); 
+            renderBookCarousel(container, homepageBooks);
+            initBookSlider(container);
 
           })
 
@@ -123,6 +123,38 @@
             );
 
           });
+
+
+    fetch("/api/books/recommended")
+
+    .then(response => response.json())
+
+    .then(books => {
+
+        const container =
+            document.getElementById(
+                "recommended-books-carousel"
+            );
+
+        const homepageBooks = books.slice(0, 8);
+
+        renderBookCarousel(
+            container,
+            homepageBooks
+        );
+
+        initBookSlider(container);
+
+    })
+
+    .catch(error => {
+
+        console.error(
+            "Error loading recommended books:",
+            error
+        );
+
+    });
 
       </script>
 
