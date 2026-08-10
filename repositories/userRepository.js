@@ -1,32 +1,28 @@
-const pool = require("../config/db");
+const { User } = require("../models");
 
 async function findByEmail(email) {
 
-    const result = await pool.query(
-        `
-        SELECT id, full_name, email, password_hash
-        FROM users
-        WHERE email = $1
-        `,
-        [email]
-    );
-
-    return result.rows[0];
+    return await User.findOne({
+        where: { email },
+        attributes: ["id", "full_name", "email", "password_hash"],
+        raw: true
+    });
 
 }
 
 async function createUser(fullName, email, passwordHash) {
 
-    const result = await pool.query(
-        `
-        INSERT INTO users (full_name, email, password_hash)
-        VALUES ($1, $2, $3)
-        RETURNING id, full_name, email
-        `,
-        [fullName, email, passwordHash]
-    );
+    const user = await User.create({
+        full_name: fullName,
+        email: email,
+        password_hash: passwordHash
+    });
 
-    return result.rows[0];
+    return {
+        id: user.id,
+        full_name: user.full_name,
+        email: user.email
+    };
 
 }
 

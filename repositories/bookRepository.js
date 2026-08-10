@@ -1,136 +1,90 @@
-const pool = require("../config/db");
+const { Book, Author, Publisher } = require("../models");
+const BookSummary = require("../domain/BookSummary");
 
 async function getBookById(id) {
-    const result = await pool.query(
-        `
-        SELECT
-            b.id,
-            b.title,
-            b.isbn,
-            b.description,
-            b.price,
-            b.publication_year,
-            b.book_language,
-            b.format,
-            b.stock_quantity,
-            b.cover_image_url,
 
-            p.name AS publisher_name,
-            p.slug AS publisher_slug,
+    const book = await Book.findOne({
+        where: { id },
+        include: [
+            {
+                model: Publisher,
+                attributes: ["name", "slug"]
+            },
+            {
+                model: Author,
+                attributes: ["full_name", "slug"],
+                through: { attributes: [] }
+            }
+        ]
+    });
 
-            STRING_AGG(a.full_name, ', ' ORDER BY a.full_name) AS authors,
-            
-            MIN(a.slug) AS author_slug
+    if (!book) {
+        return undefined;
+    }
 
-        FROM books b
+    const authorSlugs = book.Authors.map(author => author.slug).sort();
 
-        LEFT JOIN publishers p
-            ON b.publisher_id = p.id
+    return {
+        id: book.id,
+        title: book.title,
+        isbn: book.isbn,
+        description: book.description,
+        price: book.price,
+        publication_year: book.publication_year,
+        book_language: book.book_language,
+        format: book.format,
+        stock_quantity: book.stock_quantity,
+        cover_image_url: book.cover_image_url,
+        publisher_name: book.Publisher ? book.Publisher.name : null,
+        publisher_slug: book.Publisher ? book.Publisher.slug : null,
+        authors: BookSummary.authorsOf(book),
+        author_slug: authorSlugs.length > 0 ? authorSlugs[0] : null
+    };
 
-        LEFT JOIN book_authors ba
-            ON b.id = ba.book_id
-
-        LEFT JOIN authors a
-            ON ba.author_id = a.id
-
-        WHERE b.id = $1
-
-        GROUP BY
-            b.id,
-            p.name,
-            p.slug;
-        `,
-        [id]
-    );
-
-    return result.rows[0];
 }
 
 async function getLatestBooks() {
 
-    const result = await pool.query(`
-        SELECT
-            b.id,
-            b.title,
-            b.price,
-            b.cover_image_url,
+    const books = await Book.findAll({
+        attributes: ["id", "title", "price", "cover_image_url"],
+        include: [
+            {
+                model: Author,
+                attributes: ["full_name"],
+                through: { attributes: [] }
+            }
+        ],
+        order: [["id", "DESC"]],
+        limit: 20
+    });
 
-            STRING_AGG(
-                a.full_name,
-                ', '
-                ORDER BY a.full_name
-            ) AS authors
+    return BookSummary.fromModels(books);
 
-        FROM books b
-
-        LEFT JOIN book_authors ba
-            ON b.id = ba.book_id
-
-        LEFT JOIN authors a
-            ON ba.author_id = a.id
-
-        GROUP BY
-            b.id,
-            b.title,
-            b.price,
-            b.cover_image_url
-
-        ORDER BY b.id DESC
-
-        LIMIT 20
-    `);
-
-    return result.rows;
 }
 
 async function incrementBookViews(id) {
 
-    await pool.query(
-        `
-        UPDATE books
-        SET view_count = view_count + 1
-        WHERE id = $1
-        `,
-        [id]
-    );
+    await Book.increment("view_count", { where: { id } });
 
 }
 
 async function getRecommendedBooks() {
 
-    const result = await pool.query(`
-        SELECT
-            b.id,
-            b.title,
-            b.price,
-            b.cover_image_url,
+    const books = await Book.findAll({
+        attributes: ["id", "title", "price", "cover_image_url", "view_count"],
+        include: [
+            {
+                model: Author,
+                attributes: ["full_name"],
+                through: { attributes: [] }
+            }
+        ],
+        order: [["view_count", "DESC"], ["id", "DESC"]],
+        limit: 20
+    });
 
-            STRING_AGG(
-                a.full_name,
-                ', '
-                ORDER BY a.full_name
-            ) AS authors
+    return BookSummary.fromModels(books);
 
-        FROM books b
-
-        LEFT JOIN book_authors ba
-            ON b.id = ba.book_id
-
-        LEFT JOIN authors a
-            ON ba.author_id = a.id
-
-        GROUP BY
-            b.id,
-            b.title,
-            b.price,
-            b.cover_image_url
-
-        ORDER BY b.view_count DESC
-
-        LIMIT 20
-    `);
-
-    return result.rows;
 }
 
 module.exports = {

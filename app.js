@@ -10,6 +10,9 @@ const favoritesRoutes = require("./routes/favorites");
 const cartRoutes = require("./routes/cart");
 const purchasesRoutes = require("./routes/purchases");
 const { requireLoginPage, requireLoginApi } = require("./middleware/auth");
+const { initDatabase } = require("./database/bootstrap");
+const swaggerUi = require("swagger-ui-express");
+const openapi = require("./docs/openapi");
 
 
 
@@ -143,6 +146,8 @@ app.get("/search", (req, res) => {
 
 
 
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openapi));
+
 app.use("/api/categories", categoryRoutes);
 app.use("/api/publishers", publisherRoutes);
 app.use("/api/books", bookRoutes);
@@ -155,7 +160,18 @@ app.use("/api/purchases", requireLoginApi, purchasesRoutes);
 
 
 
-app.listen(PORT, () => {
-    console.log(`Server is running at http://localhost:${PORT}`);
+async function start() {
+
+    await initDatabase();
+
+    app.listen(PORT, () => {
+        console.log(`Server is running at http://localhost:${PORT}`);
+    });
+
+}
+
+start().catch(error => {
+    console.error(error);
+    process.exit(1);
 });
 

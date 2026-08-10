@@ -1,35 +1,43 @@
-const pool = require("../config/db");
+const { Purchase: PurchaseModel, Book } = require("../models");
+const cartRepository = require("./cartRepository");
+const Cart = require("../domain/Cart");
 
 async function createPurchasesFromCart(userId) {
 
-    await pool.query(
-        `
-        INSERT INTO purchases (user_id, book_id, quantity, price)
-        SELECT c.user_id, c.book_id, c.quantity, b.price
-        FROM cart_items c
-        JOIN books b ON c.book_id = b.id
-        WHERE c.user_id = $1
-        `,
-        [userId]
-    );
+    const items = await cartRepository.getCartByUser(userId);
+
+    const lines = Cart.from(items).toPurchaseLines(userId);
+
+    if (lines.length === 0) {
+        return;
+    }
+
+    await PurchaseModel.bulkCreate(lines);
 
 }
 
 async function getPurchasesByUser(userId) {
 
-    const result = await pool.query(
-        `
-        SELECT p.id, p.quantity, p.price, p.purchased_at,
-               b.id AS book_id, b.title, b.cover_image_url
-        FROM purchases p
-        JOIN books b ON p.book_id = b.id
-        WHERE p.user_id = $1
-        ORDER BY p.purchased_at DESC
-        `,
-        [userId]
-    );
+    const purchases = await PurchaseModel.findAll({
+        where: { user_id: userId },
+        include: [
+            {
+                model: Book,
+                attributes: ["id", "title", "cover_image_url"]
+            }
+        ],
+        order: [["purchased_at", "DESC"]]
+    });
 
-    return result.rows;
+    return purchases.map(purchase => ({
+        id: purchase.id,
+        quantity: purchase.quantity,
+        price: purchase.price,
+        purchased_at: purchase.purchased_at,
+        book_id: purchase.Book.id,
+        title: purchase.Book.title,
+        cover_image_url: purchase.Book.cover_image_url
+    }));
 
 }
 

@@ -1,8 +1,9 @@
-const pool = require("../config/db");
+const { QueryTypes } = require("sequelize");
+const { sequelize } = require("../config/database");
 
 async function searchBooks(query) {
 
-    const result = await pool.query(
+    return await sequelize.query(
         `
         SELECT
             b.id,
@@ -26,11 +27,11 @@ async function searchBooks(query) {
 
         WHERE
 
-            LOWER(b.title) LIKE LOWER($1)
+            LOWER(b.title) LIKE LOWER(:pattern)
 
-            OR LOWER(a.full_name) LIKE LOWER($1)
+            OR LOWER(a.full_name) LIKE LOWER(:pattern)
 
-            OR b.isbn LIKE $1
+            OR b.isbn LIKE :pattern
 
         GROUP BY
             b.id,
@@ -41,10 +42,12 @@ async function searchBooks(query) {
         ORDER BY
             b.title;
         `,
-        [`%${query}%`]
+        {
+            replacements: { pattern: `%${query}%` },
+            type: QueryTypes.SELECT
+        }
     );
 
-    return result.rows;
 }
 
 module.exports = {
