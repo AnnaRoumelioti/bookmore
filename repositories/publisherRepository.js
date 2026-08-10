@@ -1,72 +1,42 @@
-const pool = require("../config/db");
+const { Publisher, Book, Author } = require("../models");
+const BookSummary = require("../domain/BookSummary");
 
 async function getAllPublishers() {
 
-    const result = await pool.query(`
-        SELECT
-            id,
-            name,
-            slug,
-            country,
-            website_url
-        FROM publishers
-        ORDER BY name
-    `);
+    return await Publisher.findAll({
+        attributes: ["id", "name", "slug", "country", "website_url"],
+        order: [["name", "ASC"]],
+        raw: true
+    });
 
-    return result.rows;
 }
 
 async function getPublisherWithBooks(slug) {
 
-    const publisherResult = await pool.query(
-        `
-        SELECT
-            id,
-            name,
-            slug,
-            country,
-            website_url
-        FROM publishers
-        WHERE slug = $1
-        `,
-        [slug]
-    );
+    const publisher = await Publisher.findOne({
+        where: { slug },
+        attributes: ["id", "name", "slug", "country", "website_url"],
+        raw: true
+    });
 
-    const publisherId = publisherResult.rows[0].id;
-
-    const booksResult = await pool.query(
-        `
-        SELECT
-            b.id,
-            b.title,
-            b.price,
-            b.cover_image_url,
-            STRING_AGG(a.full_name, ', ') AS authors
-        FROM books b
-
-        JOIN book_authors ba
-            ON b.id = ba.book_id
-
-        JOIN authors a
-            ON ba.author_id = a.id
-
-        WHERE b.publisher_id = $1
-
-        GROUP BY
-            b.id,
-            b.title,
-            b.price,
-            b.cover_image_url
-
-        ORDER BY b.title
-        `,
-        [publisherId]
-    );
+    const books = await Book.findAll({
+        attributes: ["id", "title", "price", "cover_image_url"],
+        where: { publisher_id: publisher.id },
+        include: [
+            {
+                model: Author,
+                attributes: ["full_name"],
+                through: { attributes: [] }
+            }
+        ],
+        order: [["title", "ASC"]]
+    });
 
     return {
-        publisher: publisherResult.rows[0],
-        books: booksResult.rows
+        publisher,
+        books: BookSummary.fromModels(books)
     };
+
 }
 
 module.exports = {

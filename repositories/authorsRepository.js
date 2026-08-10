@@ -1,62 +1,74 @@
-const pool = require("../config/db");
+const { Author, Book } = require("../models");
+
+function firstNameOf(fullName) {
+
+    return fullName.split(" ")[0];
+
+}
+
+function lastNameOf(fullName) {
+
+    return fullName.slice(fullName.lastIndexOf(" ") + 1);
+
+}
 
 async function getAllAuthors() {
-    const result = await pool.query(`
-        SELECT
-           id,
-           full_name,
-           slug,
 
-           split_part(full_name, ' ', 1) AS first_name,
-           regexp_replace(full_name, '^.* ', '') AS last_name
+    const authors = await Author.findAll({
+        attributes: ["id", "full_name", "slug"],
+        raw: true
+    });
 
-        FROM authors
+    const rows = authors.map(author => ({
+        id: author.id,
+        full_name: author.full_name,
+        slug: author.slug,
+        first_name: firstNameOf(author.full_name),
+        last_name: lastNameOf(author.full_name)
+    }));
 
-        ORDER BY
-           last_name,
-           first_name;
-        `);
+    rows.sort((a, b) => {
 
-    return result.rows;
+        const byLastName = a.last_name.localeCompare(b.last_name);
+
+        if (byLastName !== 0) {
+            return byLastName;
+        }
+
+        return a.first_name.localeCompare(b.first_name);
+
+    });
+
+    return rows;
+
 }
 
 async function getAuthorBySlug(slug) {
-    const result = await pool.query(
-        `
-        SELECT
-            id,
-            full_name,
-            biography,
-            slug
-        FROM authors
-        WHERE slug = $1
-        `,
-        [slug]
-    );
 
-    return result.rows[0];
+    return await Author.findOne({
+        where: { slug },
+        attributes: ["id", "full_name", "biography", "slug"],
+        raw: true
+    });
+
 }
 
 async function getBooksByAuthorSlug(slug) {
-    const result = await pool.query(
-        `
-        SELECT
-            b.id,
-            b.title,
-            b.price,
-            b.cover_image_url
-        FROM books b
-        JOIN book_authors ba
-            ON b.id = ba.book_id
-        JOIN authors a
-            ON ba.author_id = a.id
-        WHERE a.slug = $1
-        ORDER BY b.title;
-        `,
-        [slug]
-    );
 
-    return result.rows;
+    return await Book.findAll({
+        attributes: ["id", "title", "price", "cover_image_url"],
+        include: [
+            {
+                model: Author,
+                where: { slug },
+                attributes: [],
+                through: { attributes: [] }
+            }
+        ],
+        order: [["title", "ASC"]],
+        raw: true
+    });
+
 }
 
 module.exports = {

@@ -1,57 +1,60 @@
-const pool = require("../config/db");
+const { CartItem, Book } = require("../models");
+const { sequelize } = require("../config/database");
 
 async function getCartByUser(userId) {
 
-    const result = await pool.query(
-        `
-        SELECT b.id, b.title, b.price, b.cover_image_url, c.quantity
-        FROM cart_items c
-        JOIN books b ON c.book_id = b.id
-        WHERE c.user_id = $1
-        ORDER BY b.title
-        `,
-        [userId]
-    );
+    const items = await CartItem.findAll({
+        where: { user_id: userId },
+        include: [
+            {
+                model: Book,
+                attributes: ["id", "title", "price", "cover_image_url"]
+            }
+        ],
+        order: [[Book, "title", "ASC"]]
+    });
 
-    return result.rows;
+    return items.map(item => ({
+        id: item.Book.id,
+        title: item.Book.title,
+        price: item.Book.price,
+        cover_image_url: item.Book.cover_image_url,
+        quantity: item.quantity
+    }));
 
 }
 
 async function addToCart(userId, bookId) {
 
-    await pool.query(
-        `
-        INSERT INTO cart_items (user_id, book_id)
-        VALUES ($1, $2)
-        ON CONFLICT (user_id, book_id)
-        DO UPDATE SET quantity = cart_items.quantity + 1
-        `,
-        [userId, bookId]
-    );
+    await sequelize.transaction(async (transaction) => {
+
+        const [item, created] = await CartItem.findOrCreate({
+            where: { user_id: userId, book_id: bookId },
+            defaults: { quantity: 1 },
+            transaction
+        });
+
+        if (!created) {
+            await item.increment("quantity", { transaction });
+        }
+
+    });
 
 }
 
 async function removeFromCart(userId, bookId) {
 
-    await pool.query(
-        `
-        DELETE FROM cart_items
-        WHERE user_id = $1 AND book_id = $2
-        `,
-        [userId, bookId]
-    );
+    await CartItem.destroy({
+        where: { user_id: userId, book_id: bookId }
+    });
 
 }
 
 async function clearCart(userId) {
 
-    await pool.query(
-        `
-        DELETE FROM cart_items
-        WHERE user_id = $1
-        `,
-        [userId]
-    );
+    await CartItem.destroy({
+        where: { user_id: userId }
+    });
 
 }
 
