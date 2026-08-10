@@ -5,33 +5,55 @@ async function renderBooks(container, books) {
     let html = "";
 
     let favoriteIds = new Set();
+    let cartIds = new Set();
 
-try {
+    try {
 
-    const response = await fetch("/api/favorites");
+        const response = await fetch("/api/favorites");
 
-    if (response.ok) {
+        if (response.ok) {
 
-        const favorites = await response.json();
+            const favorites = await response.json();
 
-        favoriteIds = new Set(
-            favorites.map(book => book.id)
-        );
+            favoriteIds = new Set(
+                favorites.map(book => book.id)
+            );
+
+        }
+
+    } catch (error) {
+
+        console.error("Could not load favorites:", error);
 
     }
 
-} catch (error) {
+    try {
 
-    console.error("Could not load favorites:", error);
+        const response = await fetch("/api/cart");
 
-}
+        if (response.ok) {
 
-books.forEach(book => {
+            const cartItems = await response.json();
 
-    const isFavorite = favoriteIds.has(book.id);
+            cartIds = new Set(
+                cartItems.map(item => item.id)
+            );
 
-    const heartIcon = isFavorite
-    ? `
+        }
+
+    } catch (error) {
+
+        console.error("Could not load cart:", error);
+
+    }
+
+    books.forEach(book => {
+
+        const isFavorite = favoriteIds.has(book.id);
+        const isInCart = cartIds.has(book.id);
+
+        const heartIcon = isFavorite
+            ? `
         <svg
             xmlns="http://www.w3.org/2000/svg"
             width="20"
@@ -44,7 +66,7 @@ books.forEach(book => {
                 d="M8 1.314C3.535-3.155-3.64 3.002 2.135 8.777L8 14.5l5.865-5.723C19.64 3.002 12.465-3.155 8 1.314"/>
         </svg>
     `
-    : `
+            : `
         <svg
             xmlns="http://www.w3.org/2000/svg"
             width="20"
@@ -57,6 +79,21 @@ books.forEach(book => {
                 d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.837-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143 7.89 1.2 7.946 1.29 8 1.386a.87.87 0 0 1 .176-.243C12.72-3.042 23.333 4.868 8 15"/>
         </svg>
     `;
+
+        const cartIcon = isInCart
+            ? `
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-cart-fill" viewBox="0 0 16 16">
+        <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+        </svg>
+        `
+            : `
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+            fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
+            <path
+              d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l1.313 7h8.17l1.313-7zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2" />
+          </svg>
+    `;
+
 
         html += `
             <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
@@ -106,18 +143,9 @@ books.forEach(book => {
                                 <button
                                     class="card-icons"
                                     data-book-id="${book.id}"
-                                    onclick="addToCart(${book.id})">
+                                    onclick="addToCart(${book.id}, this)">
 
-                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                         width="20"
-                                         height="20"
-                                         fill="currentColor"
-                                         class="bi bi-cart"
-                                         viewBox="0 0 16 16">
-
-                                        <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l1.313 7h8.17l1.313-7zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
-
-                                    </svg>
+                                     ${cartIcon}
 
                                 </button>
 

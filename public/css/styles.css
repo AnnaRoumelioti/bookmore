@@ -132,12 +132,11 @@ button[type="submit"]:hover,
 }
 
 .logo {
-  height: 40px;
+  width: 190px;
 }
 
 h1 {
   color: var(--brand-light);
-  letter-spacing: 5px;
 }
 
 .divider {
@@ -649,6 +648,9 @@ h3 span {
 
 
 
+
+
+
 @media (max-width: 991px) {
 
   .header-bottom,
@@ -657,7 +659,7 @@ h3 span {
   }
 
   .logo {
-    height: 30px;
+    width: 150px;
   }
 
   h1,
@@ -805,6 +807,15 @@ h3 span {
 
 
 @media (max-width: 576px) {
+
+  .logo {
+    width: 120px;
+  }
+
+  .header-top {
+
+  padding: 10px;
+}
 
   .carousel-control-prev-icon,
   .carousel-control-next-icon {
