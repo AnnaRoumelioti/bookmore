@@ -1,12 +1,96 @@
 <%- include("partials/header") %>
 
-<%- include("partials/navigation") %>
+  <%- include("partials/navigation") %>
 
-<%- include("partials/sidebar") %>
+    <%- include("partials/sidebar") %>
 
-<main>
+      <main>
+        <h2>Not found book? Send a request!</h2>
+        <p>Not finding the book you want in our store? Looking for an old or rare edition? We can help!</p>
 
-</main>
+        <p>Through the contact form on this page you can send us an inquiry. Please, give us as much detail as possible
+          about what you are looking for. To place an order, please fill out the form below and then click the "submit"
+          button. </p>
 
+        <p>After submitting your request, you will receive an automatic order confirmation, which you do not need to
+          respond to. Within 5 working days our manager will send you a reply to your e-mail and inform you about the
+          price and delivery time.</p>
 
-<%- include("partials/footer") %>
+        <div class="separator"></div>
+
+        <div class="page-header">
+          <h2>Try looking first</h2>
+          <p>We may already have what you are looking for. </p>
+
+          <form class="search" action="/search" method="GET">
+
+            <input style="background-color: #E8F0FE;" type="text" name="q" placeholder="Type title, author or ISBN">
+
+            <button type="submit" class="button">
+
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search"
+                viewBox="0 0 16 16">
+
+                <path
+                  d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+              </svg>
+
+            </button>
+
+          </form>
+
+        </div>
+
+        <div class="separator"></div>
+
+        <form id="request-form">
+          <div class="request-form">
+            <h2>Send a request</h2>
+            <div class="row g-3 g-md-4">
+
+              <div class="col-sm-6">
+                <label for="book-title">Book title:</label>
+                <input class="input-form" type="text" name="book-title" id="book-title" value="" required>
+              </div>
+
+              <div class="col-sm-6">
+                <label for="book-author">Author of the book:</label>
+                <input class="input-form" type="text" name="book-author" id="book-author" value="" required>
+              </div>
+
+              <div class="col-sm-6">
+                <label for="book-publisher">Publisher:</label>
+                <input class="input-form" type="text" name="book-publisher" id="book-publisher" value="">
+              </div>
+
+              <div class="col-sm-6">
+                <label for="email">Your email:</label>
+                <input class="input-form" type="email" name="email" id="email" value="" required>
+              </div>
+
+              <div class="col-12 textarea">
+                <label for="book-info">Any additional information:</label>
+                <div>
+                  <textarea class="input-form" name="book-info" id="book-info"></textarea>
+                </div>
+                <div>
+                  <button type="submit">Submit your request</button>
+                </div>
+              </div>
+        </form>
+        <div id="request-success" class="checkout-success">
+          <div class="checkout-success-box">
+            <h2>Request sent!</h2>
+            <p>Your request is sent.<br>We will respond within 5 days.</p>
+            <button type="button" id="request-success-close">
+              OK
+            </button>
+          </div>
+        </div>
+      </main>
+      </div>
+      
+      <script src="/js/requestForm.js"></script>
+
+      <%- include("partials/footer") %>
+
